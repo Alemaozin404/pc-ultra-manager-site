@@ -1032,3 +1032,240 @@ h2 {
   border-color: rgba(255, 211, 106, .28) !important;
   background: rgba(255, 211, 106, .08) !important;
 }
+
+/* Catálogo de planos expansível */
+.expandable-plans {
+  align-items: stretch;
+}
+
+.expandable-plans .plan {
+  cursor: pointer;
+  min-height: 420px;
+  transform-origin: center;
+  transition:
+    grid-column .45s ease,
+    min-height .45s ease,
+    transform .28s ease,
+    border-color .28s ease,
+    box-shadow .28s ease,
+    background .28s ease,
+    opacity .28s ease,
+    filter .28s ease;
+}
+
+.expandable-plans .plan:focus-visible {
+  outline: 2px solid rgba(104,199,255,.75);
+  outline-offset: 4px;
+}
+
+.plan-popover-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 980;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(104,199,255,.16), transparent 32%),
+    radial-gradient(circle at 80% 70%, rgba(154,124,255,.13), transparent 32%),
+    rgba(2, 5, 13, .72);
+  backdrop-filter: blur(16px) saturate(125%);
+  transition: opacity .32s ease;
+}
+
+.plan-popover-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.plan-popover-open {
+  overflow: hidden;
+}
+
+body.plan-popover-open .expandable-plans .plan:not(.plan-popup-active) {
+  opacity: .38;
+  filter: blur(1px) saturate(.72);
+  transform: scale(.96);
+}
+
+.expandable-plans .plan.active {
+  grid-column: span 2;
+  min-height: 560px;
+  transform: translateY(-10px) scale(1.015);
+  border-color: rgba(104,199,255,.52);
+  box-shadow: 0 26px 90px rgba(0,0,0,.34), 0 0 90px rgba(104,199,255,.12);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(104,199,255,.18), transparent 36%),
+    radial-gradient(circle at 90% 18%, rgba(154,124,255,.16), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.045));
+}
+
+.expandable-plans .plan.plan-popup-active {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1000;
+  width: min(760px, calc(100vw - 28px));
+  max-height: calc(100vh - 44px);
+  overflow: auto;
+  min-height: auto;
+  grid-column: auto;
+  transform: translate(-50%, -50%) scale(1);
+  border-color: rgba(104,199,255,.68);
+  box-shadow:
+    0 40px 140px rgba(0,0,0,.58),
+    0 0 130px rgba(104,199,255,.22),
+    inset 0 1px 0 rgba(255,255,255,.18);
+  animation: jellyPlanPopup .72s cubic-bezier(.16, 1.18, .36, 1) both;
+}
+
+.expandable-plans .premium-plan.active {
+  border-color: rgba(104,199,255,.62);
+  box-shadow: 0 28px 100px rgba(0,0,0,.36), 0 0 105px rgba(104,199,255,.18);
+}
+
+.expandable-plans .premium-plan.plan-popup-active {
+  border-color: rgba(104,199,255,.74);
+  box-shadow:
+    0 42px 150px rgba(0,0,0,.60),
+    0 0 145px rgba(104,199,255,.26),
+    inset 0 1px 0 rgba(255,255,255,.20);
+}
+
+.expandable-plans .sponsor-plan.active {
+  border-color: rgba(255,211,106,.62);
+  box-shadow: 0 28px 100px rgba(0,0,0,.36), 0 0 105px rgba(255,211,106,.13);
+}
+
+.expandable-plans .sponsor-plan.plan-popup-active {
+  border-color: rgba(255,211,106,.76);
+  box-shadow:
+    0 42px 150px rgba(0,0,0,.60),
+    0 0 145px rgba(255,211,106,.22),
+    inset 0 1px 0 rgba(255,255,255,.20);
+}
+
+@keyframes jellyPlanPopup {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -42%) scale(.56, .72);
+    filter: blur(10px);
+  }
+  45% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08, .94);
+    filter: blur(0);
+  }
+  62% {
+    transform: translate(-50%, -50%) scale(.96, 1.05);
+  }
+  78% {
+    transform: translate(-50%, -50%) scale(1.025, .985);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0);
+  }
+}
+
+.plan-price {
+  display: block;
+  margin-top: 18px;
+  font-size: clamp(22px, 3vw, 34px);
+  letter-spacing: -1.2px;
+  color: var(--text);
+}
+
+.plan-benefits {
+  transition: opacity .32s ease, transform .32s ease;
+}
+
+.price-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(16px) scale(.98);
+  overflow: hidden;
+  transition: max-height .55s ease, opacity .35s ease, transform .35s ease;
+}
+
+.plan.active .price-list {
+  max-height: 640px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.price-list div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  backdrop-filter: blur(14px);
+}
+
+.price-list div:hover {
+  border-color: rgba(104,199,255,.32);
+  background: rgba(104,199,255,.08);
+}
+
+.sponsor-prices div:hover {
+  border-color: rgba(255,211,106,.36);
+  background: rgba(255,211,106,.08);
+}
+
+.price-list b {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.price-list strong {
+  white-space: nowrap;
+  color: var(--green);
+  font-size: 15px;
+}
+
+.sponsor-prices strong {
+  color: #ffd36a;
+}
+
+.tap-hint {
+  display: block;
+  margin-top: 18px;
+  color: var(--muted);
+  letter-spacing: .3px;
+}
+
+.plan.active .tap-hint {
+  color: rgba(255,255,255,.82);
+}
+
+@media (max-width: 1050px) {
+  .expandable-plans .plan.active {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 680px) {
+  .expandable-plans .plan,
+  .expandable-plans .plan.active {
+    grid-column: span 1;
+    min-height: auto;
+    transform: none;
+  }
+
+  .expandable-plans .plan.plan-popup-active {
+    width: calc(100vw - 20px);
+    max-height: calc(100vh - 24px);
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .price-list div {
+    padding: 11px 12px;
+  }
+}

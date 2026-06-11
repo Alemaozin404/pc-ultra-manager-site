@@ -56,3 +56,54 @@ if (title) {
     });
   }, 760);
 }
+
+// Planos expansíveis: Free, Premium e Patrocinador
+const expandablePlans = document.querySelectorAll(".expandable-plans .plan");
+const planBackdrop = document.createElement("div");
+planBackdrop.className = "plan-popover-backdrop";
+planBackdrop.setAttribute("aria-hidden", "true");
+document.body.appendChild(planBackdrop);
+
+const closePlanPopup = () => {
+  expandablePlans.forEach((item) => {
+    item.classList.remove("active", "plan-popup-active");
+    item.setAttribute("aria-expanded", "false");
+  });
+
+  planBackdrop.classList.remove("show");
+  document.body.classList.remove("plan-popover-open");
+};
+
+expandablePlans.forEach((plan) => {
+  const openPlan = () => {
+    const isOpen = plan.classList.contains("plan-popup-active");
+
+    closePlanPopup();
+
+    if (!isOpen) {
+      plan.classList.add("active", "plan-popup-active");
+      plan.setAttribute("aria-expanded", "true");
+      planBackdrop.classList.add("show");
+      document.body.classList.add("plan-popover-open");
+    }
+  };
+
+  plan.addEventListener("click", (event) => {
+    event.stopPropagation();
+    openPlan();
+  });
+
+  plan.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openPlan();
+    }
+  });
+});
+
+planBackdrop.addEventListener("click", closePlanPopup);
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closePlanPopup();
+  }
+});
